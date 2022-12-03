@@ -32,7 +32,7 @@ commands:
       - run:
           name: Destroy udapeople frontend cfn stack and S3 bucket
           command: |
-            aws s3 rm s3://udapeople-<< parameters.id >> --recursive
+            aws s3 rm s3://udapeople-2-<< parameters.id >> --recursive
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.id >>
           environment:
               TERM: xterm-256color
@@ -249,7 +249,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["06:55:19:5c:75:9c:0c:fa:5e:f0:ed:c4:2b:35:ec:76"]
+          fingerprints: ["d4:35:43:07:b2:27:b9:33:c8:70:b4:2d:6f:55:49:ac"]
       - attach_workspace:
           at: .
       - run:
@@ -333,7 +333,7 @@ jobs:
           name: Deploy frontend objects to S3
           working_directory: ./frontend
           command: |
-            aws s3 cp ./dist "s3:::udapeople-2-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
+            aws s3 cp ./dist "s3://udapeople-2-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
       - persist_to_workspace:
           root: .
           paths:
@@ -398,7 +398,7 @@ jobs:
           name: Frontend smoke test.
           working_directory: ./backend
           command: |
-            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.eu-central-1.amazonaws.com/index.html"
+            URL="http://udapeople-2-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/index.html"
             curl -s ${URL} | grep -q "Welcome"
       - destroy_environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
@@ -454,7 +454,7 @@ jobs:
             then
               echo "$OldWorkflowID!=$CurrentWorkflowID => will delete old version"
 
-              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+              aws s3 rm "s3://udapeople-2-${OldWorkflowID}" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
             else
