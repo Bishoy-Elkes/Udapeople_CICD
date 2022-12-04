@@ -9,7 +9,7 @@ executors:
     docker:
       - image: python:3.9.0-alpine
   aws:
-    docker:
+    docker: 
       - image: amazon/aws-cli
 
 
