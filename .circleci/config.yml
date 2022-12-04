@@ -201,10 +201,10 @@ jobs:
           command: yum install -y tar gzip
       - run:
           name: Deploy backend infrastructure
-          working_directory: .circleci/files
+          working_directory: ./.circleci/files
           command: |
             aws cloudformation deploy \
-              --template-file backend.yaml \
+              --template-file .circleci/files/backend.yaml \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
@@ -219,10 +219,10 @@ jobs:
             curl -H "Content-Type: text/plain" -H "token: 1e288415-cfc8-4a0a-a23c-087eb7cd7678" --request PUT --data "http://$BACKEND_IP:3030" https://api.memstash.io/values/BACKEND_URL
       - run:
           name: Deploy frontend infrastructure
-          working_directory: .circleci/files
+          working_directory: ./.circleci/files
           command: |
             aws cloudformation deploy \
-              --template-file frontend.yaml \
+              --template-file .circleci/files/frontend.yaml \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
