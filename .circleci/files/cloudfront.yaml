@@ -21,7 +21,7 @@ Resources:
       DistributionConfig:
         Origins:
           - DomainName: !Sub
-              - "udapeople-2-${WorkflowID}.s3.amazonaws.com"
+              - "udapeople-2${WorkflowID}.s3.amazonaws.com"
               - { ID: !Select [0, !Split [ "-", !Ref WorkflowID] ] }
             Id: webpage
             S3OriginConfig:
