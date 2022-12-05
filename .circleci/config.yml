@@ -28,15 +28,15 @@ commands:
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.id >>
           environment:
             TERM: xterm-256color
-          when: << parameters.when >>
+          when: on_fail
       - run:
           name: Destroy udapeople frontend cfn stack and S3 bucket
           command: |
-            aws s3 rm s3://udapeople-<< parameters.id >> --recursive
+            aws s3 rm s3://udapeople-2-<< parameters.id >> --recursive
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.id >>
           environment:
               TERM: xterm-256color
-          when: << parameters.when >>
+          when: on_fail
 
   revert_migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -58,7 +58,7 @@ commands:
               ls -la
               npm run migrations:revert
             fi
-          when: << parameters.when >>
+          when: on_fail
 
 jobs:
 
@@ -211,7 +211,7 @@ jobs:
       - run:
           name: Save backend URL in memstash
           command: |
-           BACKEND_IP=$(aws ec2 describe-instances \
+            BACKEND_IP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text)
@@ -333,7 +333,7 @@ jobs:
           name: Deploy frontend objects to S3
           working_directory: ./frontend
           command: |
-            aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
+            aws s3 cp ./dist "s3://udapeople-2-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
       - persist_to_workspace:
           root: .
           paths:
