@@ -102,7 +102,7 @@ jobs:
           working_directory: ./backend
           command: npm run build
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
             - backend/dist
 
