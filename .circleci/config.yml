@@ -71,7 +71,7 @@ jobs:
           working_directory: ./backend
           command: ls -la && npm install
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
             - backend/node_modules
 
@@ -85,7 +85,7 @@ jobs:
           working_directory: ./frontend
           command: ls -la && npm install
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
             - frontend/node_modules
 
@@ -101,7 +101,7 @@ jobs:
           working_directory: ./backend
           command: npm run build
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
             - backend/dist
 
@@ -237,7 +237,7 @@ jobs:
               --output text >> inventory
             cat inventory
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
             - Udapeople_CICD/.circleci/ansible/inventory
       - destroy_environment:
@@ -336,7 +336,7 @@ jobs:
           command: |
             aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
             - frontend/dist
       - destroy_environment:
