@@ -70,7 +70,6 @@ jobs:
           name: npm install
           working_directory: ./backend
           command: 
-                mkdir -p /root/project
                 ls -la && npm install
       - persist_to_workspace:
           root: .
@@ -269,6 +268,7 @@ jobs:
             ls -la
             cat inventory
             ansible-playbook -i inventory configure-server.yaml
+            sudo mkdir -p /root/project
       - destroy_environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
           when: on_fail
