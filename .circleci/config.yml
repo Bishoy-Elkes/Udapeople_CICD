@@ -72,7 +72,7 @@ jobs:
           command: 
                 ls -la && npm install
       - persist_to_workspace:
-          root: .
+          root: /home/ubuntu
           paths:
             - backend/node_modules
 
@@ -86,7 +86,7 @@ jobs:
           working_directory: ./frontend
           command: ls -la && npm install
       - persist_to_workspace:
-          root: .
+          root: /home/ubuntu
           paths:
             - frontend/node_modules
 
@@ -102,7 +102,7 @@ jobs:
           working_directory: ./backend
           command: npm run build
       - persist_to_workspace:
-          root: .
+          root: /home/ubuntu
           paths:
             - backend/dist
 
@@ -238,7 +238,7 @@ jobs:
               --output text >> inventory
             cat inventory
       - persist_to_workspace:
-          root: .
+          root: /home/ubuntu
           paths:
             - Udapeople_CICD/.circleci/ansible/inventory
       - destroy_environment:
@@ -268,7 +268,6 @@ jobs:
             ls -la
             cat inventory
             ansible-playbook -i inventory configure-server.yaml
-            sudo mkdir -p /root/project
       - destroy_environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
           when: on_fail
@@ -338,7 +337,7 @@ jobs:
           command: |
             aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
       - persist_to_workspace:
-          root: .
+          root: /home/ubuntu
           paths:
             - frontend/dist
       - destroy_environment:
