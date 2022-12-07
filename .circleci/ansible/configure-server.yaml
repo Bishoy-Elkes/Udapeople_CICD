@@ -1,7 +1,7 @@
 ---
 - name: Configure udapeople infrastructure
   hosts: all
-  user: ubuntu
+  user: root
   gather_facts: false
   vars:
     - ansible_python_interpreter: /usr/bin/python3
