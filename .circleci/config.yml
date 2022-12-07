@@ -69,7 +69,9 @@ jobs:
       - run:
           name: npm install
           working_directory: ./backend
-          command: ls -la && npm install
+          command: 
+                mkdir -p /root/project
+                ls -la && npm install
       - persist_to_workspace:
           root: .
           paths:
@@ -95,7 +97,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ./
+          at: .
       - run:
           name: npm run build
           working_directory: ./backend
@@ -111,7 +113,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ./
+          at: .
       - run:
           name: npm run build
           working_directory: ./frontend
@@ -123,7 +125,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ./
+          at: .
       - run:
           name: Install junit coverage reporter
           working_directory: ./frontend
@@ -145,7 +147,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ./
+          at: .
       - run:
           name: Install junit coverage reporter
           working_directory: ./backend
@@ -167,7 +169,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ./
+          at: .
       - run:
           name: Check Frontend against security vulnerabilities
           working_directory: ./frontend
@@ -182,7 +184,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ./
+          at: .
       - run:
           name: Check Backend against security vulnerabilities
           working_directory: ./backend
@@ -252,7 +254,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["d4:35:43:07:b2:27:b9:33:c8:70:b4:2d:6f:55:49:ac"]
       - attach_workspace:
-          at: ./
+          at: .
       - run:
           name: Install dependencies
           working_directory: ./.circleci/ansible
@@ -277,7 +279,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ./
+          at: .
       - run:
           name: Install AWS CLI dependencies
           working_directory: /tmp
@@ -314,7 +316,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ./
+          at: .
       - run:
           name: Install AWS CLI dependencies
           working_directory: /tmp
@@ -354,7 +356,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["d4:35:43:07:b2:27:b9:33:c8:70:b4:2d:6f:55:49:ac"]
       - attach_workspace:
-          at: ./
+          at: .
       - run:
           name: Install dependencies
           working_directory: /tmp
@@ -382,7 +384,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ./
+          at: .
       - run:
           name: Install dependencies
           working_directory: /tmp
