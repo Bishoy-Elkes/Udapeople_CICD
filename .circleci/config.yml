@@ -238,9 +238,9 @@ jobs:
               --output text >> inventory
             cat inventory
       - persist_to_workspace:
-          root: .circleci/ansible/inventory
+          root: .
           paths:
-            - .circleci/ansible/inventory
+            - /.circleci/ansible/inventory
       - destroy_environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
           when: on_fail
