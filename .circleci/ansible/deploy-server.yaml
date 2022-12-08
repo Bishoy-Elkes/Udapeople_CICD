@@ -1,7 +1,7 @@
 ---
   - name: Deploy and start udapeople backend server
     hosts: all
-    user: root
+    user: ubuntu
     gather_facts: false
     vars:
       - ansible_python_interpreter: /usr/bin/python3

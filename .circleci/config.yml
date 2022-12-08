@@ -72,9 +72,13 @@ jobs:
           command: 
                 ls -la && npm install
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - backend/node_modules
+            - Udapeople_CICD/backend/dist
+            - Udapeople_CICD/backend/node_modules
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend
 
 
   install-frontend-dependencies:
@@ -85,10 +89,9 @@ jobs:
           name: npm install
           working_directory: ./frontend
           command: ls -la && npm install
-      - persist_to_workspace:
-          root: .
-          paths:
-            - frontend/node_modules
+      - save_cache:
+          paths: [frontend/node_modules]
+          key: frontend
 
 
   build-backend:
@@ -96,15 +99,14 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: /root
       - run:
           name: npm run build
           working_directory: ./backend
           command: npm run build
-      - persist_to_workspace:
-          root: .
-          paths:
-            - backend/dist
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend
 
 
   build-frontend:
@@ -112,7 +114,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: /root
       - run:
           name: npm run build
           working_directory: ./frontend
@@ -124,7 +126,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: /root
       - run:
           name: Install junit coverage reporter
           working_directory: ./frontend
@@ -146,7 +148,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: /root
       - run:
           name: Install junit coverage reporter
           working_directory: ./backend
@@ -168,7 +170,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: /root
       - run:
           name: Check Frontend against security vulnerabilities
           working_directory: ./frontend
@@ -183,7 +185,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: /root
       - run:
           name: Check Backend against security vulnerabilities
           working_directory: ./backend
@@ -238,7 +240,7 @@ jobs:
               --output text >> inventory
             cat inventory
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
             - Udapeople_CICD/.circleci/ansible/inventory
       - destroy_environment:
@@ -253,7 +255,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["d4:35:43:07:b2:27:b9:33:c8:70:b4:2d:6f:55:49:ac"]
       - attach_workspace:
-          at: .
+          at: /root
       - run:
           name: Install dependencies
           working_directory: ./.circleci/ansible
@@ -278,7 +280,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: /root
       - run:
           name: Install AWS CLI dependencies
           working_directory: /tmp
@@ -315,7 +317,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: /root
       - run:
           name: Install AWS CLI dependencies
           working_directory: /tmp
@@ -337,7 +339,7 @@ jobs:
           command: |
             aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
             - frontend/dist
       - destroy_environment:
@@ -355,7 +357,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["d4:35:43:07:b2:27:b9:33:c8:70:b4:2d:6f:55:49:ac"]
       - attach_workspace:
-          at: .
+          at: /root
       - run:
           name: Install dependencies
           working_directory: /tmp
@@ -383,7 +385,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: /root
       - run:
           name: Install dependencies
           working_directory: /tmp
