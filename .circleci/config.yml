@@ -100,9 +100,10 @@ jobs:
           name: npm run build
           working_directory: ./backend
           command: npm run build
-      - save_cache:
-          paths: [backend/node_modules]
-          key: backend
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - backend/dist
 
 
   build-frontend:
