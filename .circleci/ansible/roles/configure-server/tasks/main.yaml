@@ -1,39 +1,40 @@
 ---
   - name: "update apt packages."
-    become: yes
+    become: true
     apt:
       update_cache: yes
 
   - name: "upgrade packages"
-    become: yes
+    become: true
     apt:
       upgrade: yes
 
   - name: "remove dependencies that are no longer required"
-    become: yes
+    become: true
     apt:
       autoremove: yes
 
   - name: "install nodejs and npm"
-    become: yes
+    become: true
     apt:
       name: ["nodejs", "npm"]
       state: latest
       update_cache: yes
 
   - name: "install n"
-    become: yes
+    become: true
     npm:
       name: n
       global: yes
       production: yes
 
   - name: "install nodejs 13.8.0"
-    become: yes
-    shell: n 13.8.0
+    become: true
+    shell: |
+      curl -sl https://deb.nodesource.com/setup_13.x |sudo -E bash -
 
   - name: "install pm2"
-    become: yes
+    become: true
     npm:
       name: pm2
       global: yes
