@@ -253,7 +253,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["d4:35:43:07:b2:27:b9:33:c8:70:b4:2d:6f:55:49:ac"]
       - attach_workspace:
-          at: .
+          at: ./
       - run:
           name: Install dependencies
           working_directory: ./.circleci/ansible
@@ -264,7 +264,6 @@ jobs:
           name: Configure server
           working_directory: ./.circleci/ansible
           command: |
-            cd ./.circleci/ansible
             pwd &&
             ls -la
             cat inventory
