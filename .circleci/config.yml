@@ -268,7 +268,7 @@ jobs:
             pwd &&
             ls -la
             ansible-playbook \
-               -i .circleci/ansible/inventory* \
+               -i .circleci/ansible/ \
                .circleci/ansible/configure-server.yaml
       - destroy_environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
