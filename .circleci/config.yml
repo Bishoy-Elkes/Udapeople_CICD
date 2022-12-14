@@ -294,8 +294,7 @@ jobs:
           working_directory: ./backend
           command: |
             sudo npm i || cat /root/.npm/_logs/2022-*debug.log
-            sudo npm run migrations >> migration_status || sudo cat /root/.npm/_logs/2022-*debug.log
-            sudo cat migration_status
+            sudo npm run migrations >> migration_status || sudo cat migration_status
       - run:
           name: Send migration results to memstash
           working_directory: ./backend
