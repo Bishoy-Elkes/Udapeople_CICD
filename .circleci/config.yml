@@ -293,7 +293,6 @@ jobs:
           name: Run migrations
           working_directory: ./backend
           command: |
-            sudo npm run clean
             sudo npm install
             sudo npm start
             sudo npm run migrations >> migration_status
