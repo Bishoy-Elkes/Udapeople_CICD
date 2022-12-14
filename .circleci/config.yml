@@ -294,7 +294,6 @@ jobs:
           working_directory: ./backend
           command: |
             npm i
-            sudo npm 
             sudo npm run migrations >> migration_status
             cat migration_status
       - run:
