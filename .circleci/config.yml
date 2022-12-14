@@ -240,7 +240,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - ./project/.circleci/ansible/inventory
+            - ./.circleci/ansible/inventory
       - destroy_environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
           when: on_fail
@@ -253,7 +253,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["d4:35:43:07:b2:27:b9:33:c8:70:b4:2d:6f:55:49:ac"]
       - attach_workspace:
-          at: ./
+          at: .
       - run:
           name: Install dependencies
           working_directory: ./.circleci/ansible
