@@ -303,12 +303,12 @@ jobs:
             then
               echo "DB migration was successful, will update memstash..."
               #curl -H "Content-Type: text/plain" -H "token: 564ca3e8-c2c4-40a8-8510-84236d6ddf29" --request PUT --data "success" https://api.memstash.io/values/DB_MIGRATION_${CIRCLE_WORKFLOW_ID:0:7}
-               curl -H "Content-Type: text/plain" -H https://kvdb.io/TPE8CBmfymkziimiJciw26/values/DB_MIGRATION_${CIRCLE_WORKFLOW_ID:0:7}  --request PUT --data "success"           
+              curl -H "Content-Type: text/plain" -H "token: ecdfc255-81e1-4056-9efa-2d7fa10812e1" --request PUT --data "1" https://api.memstash.io/values/migrations-${CIRCLE_WORKFLOW_ID:0:7}
+
             else
               echo "DB migration failed, please verify setup! Probably the database already exists. Verify setup!"
               #curl -H "Content-Type: text/plain" -H "token: 564ca3e8-c2c4-40a8-8510-84236d6ddf29" --request PUT --data "failure" https://api.memstash.io/values/DB_MIGRATION_${CIRCLE_WORKFLOW_ID:0:7}
-               curl -H "Content-Type: text/plain" -H https://kvdb.io/TPE8CBmfymkziimiJciw26/values/DB_MIGRATION_${CIRCLE_WORKFLOW_ID:0:7}  --request PUT --data "failure"           
-
+              curl -H "Content-Type: text/plain" -H "token: ecdfc255-81e1-4056-9efa-2d7fa10812e1" --request PUT --data "0" https://api.memstash.io/values/migrations-${CIRCLE_WORKFLOW_ID:0:7}
             fi
             echo "WorkflowID=${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy_environment:
