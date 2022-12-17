@@ -440,7 +440,8 @@ jobs:
             WorkflowID=$(aws cloudformation \
               list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
               --no-paginate --output text)
-            curl --insecure https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+              echo "Work flow ID: $WorkflowID"
+            curl --insecure https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/WorkflowID   -d "${WorkflowID}"
       - run:
           name: Update cloudfront distribution
           working_directory: ./.circleci/files
@@ -462,7 +463,7 @@ jobs:
       - run:
           name: Clean up old environment
           command: |
-            OldWorkflowID=$(curl -H "token: 564ca3e8-c2c4-40a8-8510-84236d6ddf29" --request GET https://api.memstash.io/values/WorkflowID)
+            OldWorkflowID=$(curl --insecure https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/OldWorkflowID -d "${OldWorkflowID}"
             CurrentWorkflowID=${CIRCLE_WORKFLOW_ID:0:7}
 
             if [[ "$CurrentWorkflowID" != "$OldWorkflowID" ]]
