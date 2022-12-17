@@ -50,7 +50,7 @@ commands:
           name: Revert migrations
           working_directory: ./backend
           command: |
-            SUCCESS=$(curl -H "token: 564ca3e8-c2c4-40a8-8510-84236d6ddf29" --request GET https://api.memstash.io/values/DB_MIGRATION_<< parameters.id >>)
+            SUCCESS=$(curl --insecure https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/migration  -d << parameters.id >>)
             echo $SUCCESS
             if [[ "$SUCCESS" == "success" ]]
             then
@@ -296,7 +296,7 @@ jobs:
             sudo npm i || cat /root/.npm/_logs/2022-*debug.log
             sudo npm run migrations >> migration_status || sudo cat migration_status
       - run:
-          name: Send migration results to memstash
+          name: Send migration results to Kvdb
           working_directory: ./backend
           command: |
             if grep -q "has been executed successfully" migration_status
@@ -402,12 +402,15 @@ jobs:
           name: Backend smoke test.
           working_directory: ./backend
           command: |
-            export BACKEND_IP=$(aws ec2 describe-instances \
+            BACKEND_IP=$(aws ec2 describe-instances \
               --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text)
 
             export API_URL=http://${BACKEND_IP}:3030
+            echo $(BACKEND_IP)
+            echo backend-${CIRCLE_WORKFLOW_ID:0:7}
+            echo ${API_URL}
             curl "$BACKEND_URL/api/status"
       - run:
           name: Frontend smoke test.
