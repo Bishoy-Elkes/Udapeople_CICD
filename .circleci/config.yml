@@ -329,8 +329,13 @@ jobs:
           name: Rebuild frontend with backend API Url
           working_directory: ./frontend
           command: |
-            export API_URL=$(curl -H "token: 564ca3e8-c2c4-40a8-8510-84236d6ddf29" --request GET https://api.memstash.io/values/BACKEND_URL)
-            echo "${API_URL}"
+            export BACKEND_IP=$(aws ec2 describe-instances \
+              --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text)
+
+            echo "API_URL=http://${BACKEND_IP}:3030" 
+            #echo "${API_URL}"
             npm run build
       - run:
           name: Deploy frontend objects to S3
@@ -370,7 +375,9 @@ jobs:
           working_directory: ./.circleci/ansible
           command: |
             cat inventory
-            ansible-playbook -i inventory deploy-server.yaml -vv
+            ansible-playbook \
+               -i .circleci/ansible/inventory* \
+               configure-server.yaml  -vv
       - destroy_environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
           when: on_fail
