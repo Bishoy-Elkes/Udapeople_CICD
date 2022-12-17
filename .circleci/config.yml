@@ -301,11 +301,9 @@ jobs:
           command: |
             if grep -q "has been executed successfully" migration_status
             then
-              echo "DB migration was successful, will update Kvdb..."
               #curl -H "Content-Type: text/plain" -H "token: 564ca3e8-c2c4-40a8-8510-84236d6ddf29" --request PUT --data "success" https://api.memstash.io/values/DB_MIGRATION_${CIRCLE_WORKFLOW_ID:0:7}
               curl https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             else
-              echo "DB migration failed, please verify setup! Probably the database already exists. Verify setup!"
               #curl -H "Content-Type: text/plain" -H "token: 564ca3e8-c2c4-40a8-8510-84236d6ddf29" --request PUT --data "failure" https://api.memstash.io/values/C_${CIRCLE_WORKFLOW_ID:0:7}
                curl curl https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '0'
             fi
