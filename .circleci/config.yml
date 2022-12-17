@@ -408,10 +408,9 @@ jobs:
               --output text)
 
             export API_URL=http://${BACKEND_IP}:3030
-            echo $(BACKEND_IP)
             echo backend-${CIRCLE_WORKFLOW_ID:0:7}
             echo ${API_URL}
-            curl "$BACKEND_URL/api/status"
+            curl "$API_URL/api/status"
       - run:
           name: Frontend smoke test.
           working_directory: ./backend
