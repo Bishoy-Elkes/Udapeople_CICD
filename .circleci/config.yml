@@ -425,61 +425,61 @@ jobs:
           when: on_fail
 
 
-  cloudfront-update:
-    executor: aws
-    steps:
-      - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            yum install -y tar gzip curl
-            curl -sL https://rpm.nodesource.com/setup_10.x | bash -
-            yum install -y nodejs
-      - run:
-          name: Store old WorkflowID in memstash for cleanup phase
-          working_directory: ./.circleci/files
-          command: |
-            WorkflowID=$(aws cloudformation \
-              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-              --no-paginate --output text)
-              echo "Work flow ID: $WorkflowID"
-            curl --insecure https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/WorkflowID -d "${WorkflowID}"
-      - run:
-          name: Update cloudfront distribution
-          working_directory: ./.circleci/files
-          command: |
-            aws cloudformation deploy \
-              --template-file cloudfront.yaml \
-              --stack-name udapeople-cloudfront-production \
-              --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
-              --tags project=udapeople
-      - revert_migrations:
-          id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on_fail
-
-
-  cleanup:
-    executor: aws
-    steps:
-      - checkout
-      - run:
-          name: Clean up old environment
-          command: |
-            OldWorkflowID=$(curl --insecure https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/OldWorkflowID -d "${OldWorkflowID}"
-            CurrentWorkflowID=${CIRCLE_WORKFLOW_ID:0:7}
-
-            if [[ "$CurrentWorkflowID" != "$OldWorkflowID" ]]
-            then
-              echo "$OldWorkflowID!=$CurrentWorkflowID => will delete old version"
-
-              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
-              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
-              aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
-            else
-              echo "$OldWorkflowID==$CurrentWorkflowID => nothing needs to be done..."
-            fi
-          environment:
-            TERM: xterm-256color
+#  cloudfront-update:
+#    executor: aws
+#    steps:
+#      - checkout
+#      - run:
+#          name: Install dependencies
+#          command: |
+#            yum install -y tar gzip curl
+#            curl -sL https://rpm.nodesource.com/setup_10.x | bash -
+#            yum install -y nodejs
+#      - run:
+#          name: Store old WorkflowID in memstash for cleanup phase
+#          working_directory: ./.circleci/files
+#          command: |
+#            WorkflowID=$(aws cloudformation \
+#              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+#              --no-paginate --output text)
+#              echo "Work flow ID: $WorkflowID"
+#            curl --insecure https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/WorkflowID -d "${WorkflowID}"
+#      - run:
+#          name: Update cloudfront distribution
+#          working_directory: ./.circleci/files
+#          command: |
+#            aws cloudformation deploy \
+#              --template-file cloudfront.yaml \
+#              --stack-name udapeople-cloudfront-production \
+#              --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
+#              --tags project=udapeople
+#      - revert_migrations:
+#          id: ${CIRCLE_WORKFLOW_ID:0:7}
+#          when: on_fail
+#
+#
+#  cleanup:
+#    executor: aws
+#    steps:
+#      - checkout
+#      - run:
+#          name: Clean up old environment
+#          command: |
+#            OldWorkflowID=$(curl --insecure https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/OldWorkflowID -d "${OldWorkflowID}"
+#            CurrentWorkflowID=${CIRCLE_WORKFLOW_ID:0:7}
+#
+#            if [[ "$CurrentWorkflowID" != "$OldWorkflowID" ]]
+#            then
+#              echo "$OldWorkflowID!=$CurrentWorkflowID => will delete old version"
+#
+#              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+#              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+#              aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+#            else
+#              echo "$OldWorkflowID==$CurrentWorkflowID => nothing needs to be done..."
+#            fi
+#          environment:
+#            TERM: xterm-256color
 
 
 workflows:
@@ -538,11 +538,11 @@ workflows:
           requires:
             - deploy-backend
             - deploy-frontend
-      - cloudfront-update:
-          requires:
-            - smoke-test
-      - cleanup:
-          requires:
-            - cloudfront-update
+    #  - cloudfront-update:
+    #      requires:
+    #        - smoke-test
+    #  - cleanup:
+    #      requires:
+    #        - cloudfront-update
 
 # VS Code Extension Version: 1.3.0
