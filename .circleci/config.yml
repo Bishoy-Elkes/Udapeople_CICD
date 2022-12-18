@@ -407,16 +407,16 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text)
 
-            export API_URL=http://${BACKEND_IP}:3030
-            echo backend-${CIRCLE_WORKFLOW_ID:0:7}
-            echo ${API_URL}
-            curl -s $API_URL/api/status
+             export API_URL=http://${BACKEND_IP}:3030
+             echo backend-${CIRCLE_WORKFLOW_ID:0:7}
+             echo ${API_URL}
+            curl -s $API_URL/api/status | grep -q "ok"
       - run:
           name: Frontend smoke test.
           working_directory: ./backend
           command: |
-            URL=http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com
-            curl -s ${URL} | grep -q "Welcome"
+            FRONTEND_WEBSITE=http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com
+            curl -s ${FRONTEND_WEBSITE} | grep -q "Welcome"
       - destroy_environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
           when: on_fail
@@ -443,7 +443,7 @@ jobs:
               list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
               --no-paginate --output text)
               echo "Work flow ID: $WorkflowID"
-            curl --insecure https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/WorkflowID   -d "${WorkflowID}"
+            curl --insecure https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/WorkflowID -d "${WorkflowID}"
       - run:
           name: Update cloudfront distribution
           working_directory: ./.circleci/files
