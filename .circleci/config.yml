@@ -465,18 +465,23 @@ jobs:
       - run:
           name: Clean up old environment
           command: |
-            OldWorkflowID=$(curl --insecure https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/OldWorkflowID)
-            CurrentWorkflowID=${CIRCLE_WORKFLOW_ID:0:7}
+            export CurrentWorkflowID=($(aws cloudfromation list-stacks \
+               --query "StackSummaries[*].StackName" \
+               --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
+            echo Stack names: "${CurrentWorkflowID[@]}"
 
-            if [[ "$CurrentWorkflowID" != "$OldWorkflowID" ]]
+            export OldWorkflowID=$(curl --insecure https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/OldWorkflowID)
+            echo Old Workflow ID: $OldWorkflowID
+
+            if [[ "${CurrentWorkflowID[@]}" =~ "${OldWorkflowID}" ]]
             then
-              echo "$OldWorkflowID!=$CurrentWorkflowID => will delete old version"
+              #echo "$OldWorkflowID!=$CurrentWorkflowID => will delete old version"
 
               aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
-            else
-              echo "$OldWorkflowID==$CurrentWorkflowID => nothing needs to be done..."
+            #else
+              #echo "$OldWorkflowID==$CurrentWorkflowID => nothing needs to be done..."
             fi
           environment:
             TERM: xterm-256color
