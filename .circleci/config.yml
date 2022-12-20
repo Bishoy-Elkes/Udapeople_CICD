@@ -465,7 +465,7 @@ jobs:
       - run:
           name: Clean up old environment
           command: |
-            export CurrentWorkflowID=($(aws cloudfromation list-stacks \
+            export CurrentWorkflowID=($(aws cloudformation list-stacks \
                --query "StackSummaries[*].StackName" \
                --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
             echo Stack names: "${CurrentWorkflowID[@]}"
