@@ -416,12 +416,8 @@ jobs:
           working_directory: ./backend
           command: |
             FRONTEND_WEBSITE="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com/#/emplotees"
-             if curl -s ${FRONTEND_WEBSITE} | grep -q "Welcome"
-             then 
-              return 1
-             else 
-              return 1
-            fi
+            curl -s ${FRONTEND_WEBSITE} | grep -q "Welcome"
+             
       - destroy_environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
           when: on_fail
