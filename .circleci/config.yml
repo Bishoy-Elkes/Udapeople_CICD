@@ -404,7 +404,7 @@ jobs:
           command: |
             BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
              API_URL="http://${BACKEND_IP}:3030"
-             curl "${API_URL}/api/status"
+             curl -s $API_URL/api/status
              
             #BACKEND_IP=$(aws ec2 describe-instances \
             #  --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
