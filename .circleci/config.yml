@@ -402,28 +402,40 @@ jobs:
           name: Backend smoke test.
           working_directory: ./backend
           command: |
-            BACKEND_IP=$(aws ec2 describe-instances \
-              --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text)
-
-            export API_URL=http://${BACKEND_IP}:3030
-            echo backend-${CIRCLE_WORKFLOW_ID:0:7}
-            echo ${API_URL}
-            #curl -s $API_URL/api/status | grep -q "ok"
+            BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+             API_URL="http://${BACKEND_IP}:3030"
+             curl "${API_URL}/api/status"
+             
+            #BACKEND_IP=$(aws ec2 describe-instances \
+            #  --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            #  --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            #  --output text)
+#
+            #export API_URL=http://${BACKEND_IP}:3030
+            #echo backend-${CIRCLE_WORKFLOW_ID:0:7}
+            #echo ${API_URL}
+            ##curl -s $API_URL/api/status | grep -q "ok"
       - run:
           name: Frontend smoke test.
           working_directory: ./backend
           command: |
-            FRONTEND_WEBSITE="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com/#/emplotees"
-            curl -s ${FRONTEND_WEBSITE} | grep -q "Welcome"
+             URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com"             
+            echo ${URL} 
+            if curl -s ${URL} | grep "Welcome"
+            then
+              exit 0
+            else
+              exit 1
+            fi   
+            #FRONTEND_WEBSITE="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com/#/emplotees"
+            #curl -s ${FRONTEND_WEBSITE} | grep -q "Welcome"
              
-      - destroy_environment:
-          id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on_fail
-      - revert_migrations:
-          id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on_fail
+      #- destroy_environment:
+      #    id: ${CIRCLE_WORKFLOW_ID:0:7}
+      #    when: on_fail
+      #- revert_migrations:
+      #    id: ${CIRCLE_WORKFLOW_ID:0:7}
+      #    when: on_fail
 
 
   cloudfront-update:
@@ -466,36 +478,36 @@ jobs:
       - run:
           name: Clean up old environment
           command: |
-            if [[ 0d50f14 == "" ]]
-            then
-            echo "No workflow id found"
-            else
-            if [[ "492fbe8" != "0d50f14" ]]
-            then
-              echo "$OldWorkflowID!=$CurrentWorkflowID => will delete old version"
-              aws s3 rm "s3://udapeople-0d50f14" --recursive
-              aws cloudformation delete-stack --stack-name "udapeople-frontend-6f4e40c"
-              aws cloudformation delete-stack --stack-name "udapeople-backend-6f4e40c"
-            fi
-            fi
-            #export CurrentWorkflowID=($(aws cloudformation list-stacks \
-            #   --query "StackSummaries[*].StackName" \
-            #   --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
-            #echo Stack names: "${CurrentWorkflowID[@]}"
-#
-            #export OldWorkflowID=$(curl --insecure https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/OldWorkflowID)
-            #echo Old Workflow ID: $OldWorkflowID
-#
-            #if [[ "${CurrentWorkflowID[@]}" =~ "${OldWorkflowID}" ]]
+            #if [[ 0d50f14 == "" ]]
+            #then
+            #echo "No workflow id found"
+            #else
+            #if [[ "492fbe8" != "0d50f14" ]]
             #then
             #  echo "$OldWorkflowID!=$CurrentWorkflowID => will delete old version"
-#
-            #  aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
-            #  aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
-            #  aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
-            #else
-            #  echo "$ ==$CurrentWorkflowID => nothing needs to be done..."
+            #  aws s3 rm "s3://udapeople-0d50f14" --recursive
+            #  aws cloudformation delete-stack --stack-name "udapeople-frontend-6f4e40c"
+            #  aws cloudformation delete-stack --stack-name "udapeople-backend-6f4e40c"
             #fi
+            #fi
+             export CurrentWorkflowID=($(aws cloudformation list-stacks \
+                --query "StackSummaries[*].StackName" \
+                --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
+             echo Stack names: "${CurrentWorkflowID[@]}"
+
+             export OldWorkflowID=$(curl --insecure https://kvdb.io/GcvAJSPvEZt4axA4hkbXJ2/OldWorkflowID)
+             echo Old Workflow ID: $OldWorkflowID
+
+             if [[ "${CurrentWorkflowID[@]}" =~ "${OldWorkflowID}" ]]
+             then
+               echo "$OldWorkflowID!=$CurrentWorkflowID => will delete old version"
+
+               aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+               aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+             else
+               echo "$ ==$CurrentWorkflowID => nothing needs to be done..."
+             fi
           #environment:
             #TERM: xterm-256color
 
