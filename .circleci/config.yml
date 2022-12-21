@@ -402,7 +402,6 @@ jobs:
           name: Backend smoke test.
           working_directory: ./backend
           command: |
-<<<<<<< HEAD
             #BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
              #API_URL="http://${BACKEND_IP}:3030"
              #if curl -s $API_URL/api/status | grep "ok"
@@ -411,31 +410,15 @@ jobs:
              #else
              #  exit 1
              #fi       
-
             BACKEND_IP=$(aws ec2 describe-instances \
               --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text)
-=======
-            BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-             API_URL="http://${BACKEND_IP}:3030"
-             if curl -s $API_URL/api/status | grep "ok"
-             then
-               exit 0
-             else
-               exit 1
-             fi       
->>>>>>> 726029adf4f11a903168b2d0b254342c935487dc
 
-            #BACKEND_IP=$(aws ec2 describe-instances \
-            #  --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            #  --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            #  --output text)
-#
-            #export API_URL=http://${BACKEND_IP}:3030
-            #echo backend-${CIRCLE_WORKFLOW_ID:0:7}
-            #echo ${API_URL}
-            ##curl -s $API_URL/api/status | grep -q "ok"
+            export API_URL=http://${BACKEND_IP}:3030
+            echo backend-${CIRCLE_WORKFLOW_ID:0:7}
+            echo ${API_URL}
+            #curl -s $API_URL/api/status | grep -q "ok"
       - run:
           name: Frontend smoke test.
           working_directory: ./backend
