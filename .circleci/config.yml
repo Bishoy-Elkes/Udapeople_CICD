@@ -473,7 +473,7 @@ jobs:
             if [[ "492fbe8" != "0d50f14" ]]
             then
               echo "$OldWorkflowID!=$CurrentWorkflowID => will delete old version"
-              aws s3 rm "s3://udapeople-6f4e40c" --recursive
+              aws s3 rm "s3://udapeople-0d50f14" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-frontend-6f4e40c"
               aws cloudformation delete-stack --stack-name "udapeople-backend-6f4e40c"
             fi
