@@ -420,13 +420,13 @@ jobs:
           working_directory: ./backend
           command: |
              URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com"             
-            echo ${URL} 
-            if curl -s ${URL} | grep "Welcome"
-            then
+             echo ${URL} 
+             if curl -s ${URL} | grep "Welcome"
+             then
               exit 0
-            else
+             else
               exit 1
-            fi   
+             fi   
             #FRONTEND_WEBSITE="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com/#/emplotees"
             #curl -s ${FRONTEND_WEBSITE} | grep -q "Welcome"
              
